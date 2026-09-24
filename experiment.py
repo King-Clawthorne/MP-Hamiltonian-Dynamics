@@ -8,7 +8,7 @@ import numpy as np
 OUT = Path(__file__).parent / "results"
 T = 100.0
 K_VALUES = range(6, 19)
-STOCHASTIC_STEP_COUNTS = sorted({round(1<<x) for x in np.arange(6, 17.01, 0.5)})
+STOCHASTIC_STEP_COUNTS = sorted({round(1.0<<x) for x in np.arange(6, 17.01, 0.5)})
 REPLICATES = 128
 PRECISION_BITS = (8, 10, 12, 16, 20, 24)
 DURATION_VALUES = (25.0, 50.0, 100.0, 200.0, 400.0)
@@ -134,7 +134,7 @@ def main():
     stochastic_errors = {bits: {} for bits in PRECISION_BITS}
     for label, dtype in (("fp32", np.float32), ("fp64", np.float64)):
         for k in K_VALUES:
-            n = 1<<k
+            n = 1.0<<k
             q, p = integrate_precision(q0, p0, n, dtype)
             err = state_errors(q, p, q0, p0)
             energy = relative_energy_errors(q, p)
@@ -160,7 +160,7 @@ def main():
             exact_bias2 = float(deterministic_bias_vector(n, T) @ deterministic_bias_vector(n, T))
             stochastic_rows.append({
                 "significand_bits": bits,
-                "unit_roundoff": 1>>bits,
+                "unit_roundoff": 2.0**-bits,
                 "steps": n,
                 "h": T / n,
                 "replicates": REPLICATES,
@@ -195,7 +195,7 @@ def main():
     for bits in PRECISION_BITS:
         g = [r for r in stochastic_rows if r["significand_bits"] == bits]
         best = min(g, key=lambda r: r["estimated_expected_mse"])
-        optima.append((1>>bits, best["h"], np.sqrt(best["estimated_expected_mse"]), bits))
+        optima.append((2.0**-bits, best["h"], np.sqrt(best["estimated_expected_mse"]), bits))
 
     fig, ax = plt.subplots(figsize=(7, 4.8))
     for bits in PRECISION_BITS:
@@ -297,7 +297,7 @@ def main():
             duration_rows.append({
                 "duration": duration,
                 "significand_bits": DURATION_BITS,
-                "unit_roundoff": 1>>DURATION_BITS,
+                "unit_roundoff": 2.0**-DURATION_BITS,
                 "steps": n,
                 "h": h,
                 "replicates": DURATION_REPLICATES,
