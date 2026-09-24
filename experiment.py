@@ -8,7 +8,7 @@ import numpy as np
 OUT = Path(__file__).parent / "results"
 T = 100.0
 K_VALUES = range(6, 19)
-STOCHASTIC_STEP_COUNTS = sorted({round(2**x) for x in np.arange(6, 17.01, 0.5)})
+STOCHASTIC_STEP_COUNTS = sorted({round(1<<x) for x in np.arange(6, 17.01, 0.5)})
 REPLICATES = 128
 PRECISION_BITS = (8, 10, 12, 16, 20, 24)
 DURATION_VALUES = (25.0, 50.0, 100.0, 200.0, 400.0)
@@ -25,10 +25,7 @@ def initial_ensemble():
 
 
 def exact_state_at(q0, p0, duration):
-    return (
-        np.cos(duration) * q0 + np.sin(duration) * p0,
-        -np.sin(duration) * q0 + np.cos(duration) * p0,
-    )
+    return (np.cos(duration) * q0 + np.sin(duration) * p0, -np.sin(duration) * q0 + np.cos(duration) * p0)
 
 
 def verlet_matrix(n, duration):
@@ -198,7 +195,7 @@ def main():
     for bits in PRECISION_BITS:
         g = [r for r in stochastic_rows if r["significand_bits"] == bits]
         best = min(g, key=lambda r: r["estimated_expected_mse"])
-        optima.append((2.0**-bits, best["h"], np.sqrt(best["estimated_expected_mse"]), bits))
+        optima.append((1>>bits, best["h"], np.sqrt(best["estimated_expected_mse"]), bits))
 
     fig, ax = plt.subplots(figsize=(7, 4.8))
     for bits in PRECISION_BITS:
@@ -269,16 +266,8 @@ def main():
     
     fit_ax.loglog(u_grid, np.exp(intercept) * u_grid**slope, "-", label=f"grid-minimum fit: slope {slope:.3f}")
     fit_ax.loglog(u_grid, np.exp(intercept) * u_grid**0.4, "--", label="reference slope 0.4")
-    
-    fit_ax.scatter(
-        [heldout["unit_roundoff"]],
-        [heldout["predicted_h"]],
-        marker="s",
-        s=60,
-        facecolors="none",
-        edgecolors="black",
-        zorder=5,
-        label="fixed-B prediction at s=16"
+    fit_ax.scatter([heldout["unit_roundoff"]], [heldout["predicted_h"]], marker="s",
+        s=60, facecolors="none", edgecolors="black", zorder=5, label="fixed-B prediction at s=16"
     )
     
     fit_ax.set(xlabel=r"unit roundoff $u=2^{-s}$", ylabel="grid-minimizing step h", title="Precision scaling of the optimal step")
@@ -326,12 +315,7 @@ def main():
     for duration in DURATION_VALUES:
         group = [r for r in duration_rows if r["duration"] == duration]
         best = min(group, key=lambda r: r["estimated_expected_mse"])
-        duration_optima.append({
-            "duration": duration,
-            "h": best["h"],
-            "risk_mse": best["estimated_expected_mse"],
-            "steps": best["steps"]
-        })
+        duration_optima.append({"duration": duration, "h": best["h"], "risk_mse": best["estimated_expected_mse"], "steps": best["steps"]})
 
     boot_rng = np.random.default_rng(551902)
     bootstrap_h = np.empty((DURATION_BOOTSTRAPS, len(DURATION_VALUES)))
@@ -348,14 +332,10 @@ def main():
             bootstrap_h[bi, ti] = 1.0 / denominator_array[chosen]
         
     bootstrap_slopes = np.polyfit(np.log(np.array(DURATION_VALUES)), np.log(bootstrap_h.T), 1)[0]
-    duration_slope, duration_intercept = np.polyfit(
-        np.log([r["duration"] for r in duration_optima]),
-        np.log([r["h"] for r in duration_optima]), 1
-    )
+    duration_slope, duration_intercept = np.polyfit(np.log([r["duration"] for r in duration_optima]), np.log([r["h"] for r in duration_optima]), 1)
     
     slope_ci = np.quantile(bootstrap_slopes, [0.025, 0.975]).tolist()
-    for ti, row in enumerate(duration_optima):
-        row["h_ci95"] = [float(x) for x in np.quantile(bootstrap_h[:, ti], [0.025, 0.975])]
+    for ti, row in enumerate(duration_optima): row["h_ci95"] = [float(x) for x in np.quantile(bootstrap_h[:, ti], [0.025, 0.975])]
     
     duration_predictions = []
     for row in duration_optima:
@@ -394,15 +374,10 @@ def main():
     hs = np.array([r["h"] for r in duration_optima])
     h_ci = np.array([r["h_ci95"] for r in duration_optima])
     
-    ax.errorbar(ds, hs,
-        yerr=np.maximum(0, np.vstack((hs - h_ci[:, 0], h_ci[:, 1] - hs))),
-        fmt="o", capsize=3, label="grid minima, bootstrap 95% CI"
-    )
+    ax.errorbar(ds, hs, yerr=np.maximum(0, np.vstack((hs - h_ci[:, 0], h_ci[:, 1] - hs))), fmt="o", capsize=3, label="grid minima, bootstrap 95% CI")
     
     grid = np.geomspace(ds.min(), ds.max(), 100)
-    ax.loglog(grid, np.exp(duration_intercept) * grid**duration_slope,
-        "-", label=f"fit {duration_slope:.3f} [{slope_ci[0]:.3f}, {slope_ci[1]:.3f}]"
-    )
+    ax.loglog(grid, np.exp(duration_intercept) * grid**duration_slope, "-", label=f"fit {duration_slope:.3f} [{slope_ci[0]:.3f}, {slope_ci[1]:.3f}]")
     
     h_fixed_b = (144.0 * B2 * (1>>DURATION_BITS) ** 2 / grid) ** 0.2
     ax.loglog(grid, h_fixed_b, "--", label="fixed-B prediction (s=16)")
