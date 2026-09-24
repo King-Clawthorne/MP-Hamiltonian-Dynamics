@@ -405,8 +405,7 @@ def main():
             "predicted_exponent": 0.4,
             "observed_optima": [{"unit_roundoff": u, "h": h, "rms_error": e, "significand_bits": p} for u, h, e, p in optima],
             "model_optima": [{"unit_roundoff": u, "h": h} for u, h in predicted],
-            "duration_scaling": duration_fit
-            }, f, indent=2
+            "duration_scaling": duration_fit}, f, indent=2
         )
     
     print(f"Stochastic-rounding h_opt slope: {slope:.3f} (predicted 0.4), phase A={A_phase:.6g}, fitted B={B:.6g}")
