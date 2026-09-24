@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mixed-precision-hamiltonian-dynamics"
+version = "1.0.0"
+description = "Reproducible experiments on stochastic rounding in Hamiltonian dynamics"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+authors = [{ name = "Cohen Brunner Thomas" }]
+dependencies = [
+    "numpy==2.1.3",
+    "matplotlib==3.10.0",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "S", "RUF"]

@@ -1,0 +1,289 @@
+{
+  "roundoff_coefficient_B": 0.638757475702282,
+  "B_fit_significand_bits": [
+    10,
+    12,
+    20,
+    24
+  ],
+  "duration_precision_held_out": 16,
+  "fixed_B_out_of_sample_predictions": [
+    {
+      "significand_bits": 16,
+      "unit_roundoff": 1.52587890625e-05,
+      "predicted_h": 0.010646697738387183,
+      "observed_h": 0.01220703125,
+      "relative_h_error": 0.12782252127132196
+    }
+  ],
+  "observed_loglog_slope": 0.4192126183438972,
+  "fit_significand_bits_min": 10,
+  "precision_slope_ci95": [
+    0.3917727397085671,
+    0.44817594283000806
+  ],
+  "precision_bootstrap_replicates": 2000,
+  "precision_bootstrap_optima": [
+    {
+      "significand_bits": 8,
+      "h_ci95": [
+        0.09765625,
+        0.09765625
+      ]
+    },
+    {
+      "significand_bits": 10,
+      "h_ci95": [
+        0.048828125,
+        0.06906077348066299
+      ]
+    },
+    {
+      "significand_bits": 12,
+      "h_ci95": [
+        0.034530386740331494,
+        0.034530386740331494
+      ]
+    },
+    {
+      "significand_bits": 16,
+      "h_ci95": [
+        0.008631851532153647,
+        0.01220703125
+      ]
+    },
+    {
+      "significand_bits": 20,
+      "h_ci95": [
+        0.0021579163160052655,
+        0.0030517578125
+      ]
+    },
+    {
+      "significand_bits": 24,
+      "h_ci95": [
+        0.000762939453125,
+        0.0010789581580026328
+      ]
+    }
+  ],
+  "precision_bootstrap_resampling": "independent by significand precision and timestep, with paired state components within each trajectory",
+  "precision_rng_seed_scheme": "42017 + 1000*significand_bits + step_count (collision-free on tested grid)",
+  "predicted_exponent": 0.4,
+  "observed_optima": [
+    {
+      "unit_roundoff": 0.00390625,
+      "h": 0.09765625,
+      "rms_error": 0.08961546334282539,
+      "significand_bits": 8
+    },
+    {
+      "unit_roundoff": 0.0009765625,
+      "h": 0.048828125,
+      "rms_error": 0.0293139736359954,
+      "significand_bits": 10
+    },
+    {
+      "unit_roundoff": 0.000244140625,
+      "h": 0.034530386740331494,
+      "rms_error": 0.009558988916359725,
+      "significand_bits": 12
+    },
+    {
+      "unit_roundoff": 1.52587890625e-05,
+      "h": 0.01220703125,
+      "rms_error": 0.0010547705423171372,
+      "significand_bits": 16
+    },
+    {
+      "unit_roundoff": 9.5367431640625e-07,
+      "h": 0.0021579163160052655,
+      "rms_error": 0.00011283033420757188,
+      "significand_bits": 20
+    },
+    {
+      "unit_roundoff": 5.960464477539063e-08,
+      "h": 0.0010789581580026328,
+      "rms_error": 1.1692607960063019e-05,
+      "significand_bits": 24
+    }
+  ],
+  "model_optima": [
+    {
+      "unit_roundoff": 0.0009765625,
+      "h": 0.05619360755763908
+    },
+    {
+      "unit_roundoff": 0.000244140625,
+      "h": 0.03227475228140449
+    },
+    {
+      "unit_roundoff": 1.52587890625e-05,
+      "h": 0.010646697738387183
+    },
+    {
+      "unit_roundoff": 9.5367431640625e-07,
+      "h": 0.003512100472352442
+    },
+    {
+      "unit_roundoff": 5.960464477539063e-08,
+      "h": 0.0011585610891745664
+    }
+  ],
+  "duration_scaling": {
+    "significand_bits": 16,
+    "predicted_loglog_slope": -0.2,
+    "observed_loglog_slope": -0.20465298637024476,
+    "slope_ci95": [
+      -0.2541057094330445,
+      -0.14447116888107575
+    ],
+    "bootstrap_replicates": 2000,
+    "common_h_grid": [
+      0.02857142857142857,
+      0.025,
+      0.022222222222222223,
+      0.02,
+      0.01818181818181818,
+      0.016666666666666666,
+      0.015384615384615385,
+      0.014285714285714285,
+      0.013333333333333334,
+      0.0125,
+      0.011764705882352941,
+      0.011111111111111112,
+      0.010526315789473684,
+      0.01,
+      0.009523809523809525,
+      0.00909090909090909,
+      0.008695652173913044,
+      0.008333333333333333,
+      0.008,
+      0.007692307692307693,
+      0.007407407407407408,
+      0.007142857142857143,
+      0.006896551724137931,
+      0.006666666666666667,
+      0.0064516129032258064,
+      0.00625,
+      0.006060606060606061,
+      0.0058823529411764705,
+      0.005714285714285714,
+      0.005555555555555556,
+      0.005405405405405406,
+      0.005263157894736842,
+      0.005128205128205128,
+      0.005
+    ],
+    "B_fit_significand_bits": [
+      10,
+      12,
+      20,
+      24
+    ],
+    "roundoff_coefficient_B": 0.638757475702282,
+    "fixed_B_predictions": [
+      {
+        "duration": 25.0,
+        "significand_bits": 16,
+        "predicted_h": 0.01404840188940977,
+        "observed_h": 0.013333333333333334,
+        "observed_h_ci95_low": 0.011111111111111112,
+        "observed_h_ci95_high": 0.014285714285714285,
+        "relative_error": -0.05090034878739355
+      },
+      {
+        "duration": 50.0,
+        "significand_bits": 16,
+        "predicted_h": 0.01222984417823601,
+        "observed_h": 0.0125,
+        "observed_h_ci95_low": 0.010526315789473684,
+        "observed_h_ci95_high": 0.0125,
+        "relative_error": 0.02208988257141945
+      },
+      {
+        "duration": 100.0,
+        "significand_bits": 16,
+        "predicted_h": 0.010646697738387183,
+        "observed_h": 0.01,
+        "observed_h_ci95_low": 0.008333333333333333,
+        "observed_h_ci95_high": 0.011764705882352941,
+        "relative_error": -0.060741626584878326
+      },
+      {
+        "duration": 200.0,
+        "significand_bits": 16,
+        "predicted_h": 0.009268488713396533,
+        "observed_h": 0.00909090909090909,
+        "observed_h_ci95_low": 0.007407407407407408,
+        "observed_h_ci95_high": 0.01,
+        "relative_error": -0.019159501400780855
+      },
+      {
+        "duration": 400.0,
+        "significand_bits": 16,
+        "predicted_h": 0.00806868807035112,
+        "observed_h": 0.007692307692307693,
+        "observed_h_ci95_low": 0.006896551724137931,
+        "observed_h_ci95_high": 0.008695652173913044,
+        "relative_error": -0.04664703539928128
+      }
+    ],
+    "bootstrap_resampling": "independent by duration and h, with paired state components within each trajectory",
+    "optima": [
+      {
+        "duration": 25.0,
+        "h": 0.013333333333333334,
+        "risk_mse": 1.8639058341963684e-07,
+        "steps": 1875,
+        "h_ci95": [
+          0.011111111111111112,
+          0.014285714285714285
+        ]
+      },
+      {
+        "duration": 50.0,
+        "h": 0.0125,
+        "risk_mse": 4.20563457201992e-07,
+        "steps": 4000,
+        "h_ci95": [
+          0.010526315789473684,
+          0.0125
+        ]
+      },
+      {
+        "duration": 100.0,
+        "h": 0.01,
+        "risk_mse": 1.0145273290805409e-06,
+        "steps": 10000,
+        "h_ci95": [
+          0.008333333333333333,
+          0.011764705882352941
+        ]
+      },
+      {
+        "duration": 200.0,
+        "h": 0.00909090909090909,
+        "risk_mse": 2.345743394254744e-06,
+        "steps": 22000,
+        "h_ci95": [
+          0.007407407407407408,
+          0.01
+        ]
+      },
+      {
+        "duration": 400.0,
+        "h": 0.007692307692307693,
+        "risk_mse": 4.973733970339081e-06,
+        "steps": 52000,
+        "h_ci95": [
+          0.006896551724137931,
+          0.008695652173913044
+        ]
+      }
+    ],
+    "rng_seed_scheme": "legacy formula retained for unique conditions, with duplicate seeds reassigned using SeedSequence([73019, duration, timestep_denominator, salt])",
+    "rng_seed_collisions_reassigned": 16
+  },
+  "phase_coefficient_A": 4.166666666666667
+}

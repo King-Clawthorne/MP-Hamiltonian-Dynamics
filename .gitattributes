@@ -1,0 +1,15 @@
+# Normalize text files across operating systems.
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.tex text eol=lf
+*.txt text eol=lf
+*.csv text eol=lf
+*.json text eol=lf
+
+# Preserve binary assets without line-ending conversion.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
