@@ -3,6 +3,7 @@
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
+11pt
 ]{article}
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
@@ -202,16 +203,14 @@ identical across all five durations. The grid is fixed in advance rather
 than centered on a theory-predicted optimum. The 170 duration/timestep
 conditions use distinct, reproducibly seeded pseudorandom streams.
 
-The implementation and raw results are
-\href{experiment.py}{\texttt{experiment.py}},
-\href{results/precision_sweep.csv}{\texttt{precision\_sweep.csv}},
-\href{results/stochastic_sweep.csv}{\texttt{stochastic\_sweep.csv}}, and
-\href{results/duration_sweep.csv}{\texttt{duration\_sweep.csv}}. Model
-fits are saved in
-\href{results/crossover_fit.json}{\texttt{crossover\_fit.json}} and
-\href{results/duration_scaling.json}{\texttt{duration\_scaling.json}}.
-The fixed-coefficient duration predictions are also available in
-\href{results/fixed_b_duration_predictions.csv}{\texttt{fixed\_b\_duration\_predictions.csv}}.
+The implementation and raw results are \href{experiment.py}{\nolinkurl{experiment.py}},
+\href{results/precision_sweep.csv}{\nolinkurl{results/precision_sweep.csv}},
+\href{results/stochastic_sweep.csv}{\nolinkurl{results/stochastic_sweep.csv}}, and
+\href{results/duration_sweep.csv}{\nolinkurl{results/duration_sweep.csv}}. Model
+fits are saved in \href{results/crossover_fit.json}{\nolinkurl{results/crossover_fit.json}}
+and \href{results/duration_scaling.json}{\nolinkurl{results/duration_scaling.json}}.
+Fixed-coefficient duration predictions are in
+\href{results/fixed_b_duration_predictions.csv}{\nolinkurl{results/fixed_b_duration_predictions.csv}}.
 
 \section{Quantitative crossover derivation}\label{quantitative-crossover-derivation}
 
@@ -345,7 +344,7 @@ grid (Figure~\ref{fig:direct}).
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.82\textwidth]{results/precision_crossover.png}
+\includegraphics[width=0.82\linewidth]{results/precision_crossover.png}
 \caption{Direct state rounding at \(T=100\), averaged over 128 initial
 phases on the unit-radius circle. Stars mark grid minima.}
 \label{fig:direct}
@@ -380,18 +379,18 @@ Figures~\ref{fig:sr-curves} and
 \ref{fig:precision-scaling} show the error curves and the selected
 optima.
 
-\begin{figure}[tbp]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.82\textwidth]{results/stochastic_error_curves.png}
+\includegraphics[width=0.82\linewidth]{results/stochastic_error_curves.png}
 \caption{Estimated RMS final-state risk under stochastic rounding at
 \(T=100\). Each curve uses the exact matrix bias and a sample covariance
 trace from 128 trajectories per grid point. Stars mark grid minima.}
 \label{fig:sr-curves}
 \end{figure}
 
-\begin{figure}[tbp]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.82\textwidth]{results/precision_scaling.png}
+\includegraphics[width=0.82\linewidth]{results/precision_scaling.png}
 \caption{Grid-minimizing steps versus unit-roundoff scale. The fitted
 slope uses \(s=10,12,16,20,24\). The dashed reference line shares its
 intercept with that fit. The open square is the asymptotic fixed-\(B\)
@@ -429,6 +428,7 @@ duration-grid minima at \(s=16\). The interval is the percentile
 trajectory-bootstrap interval for the selected grid minimum. Relative
 difference is \((h_{\mathrm{grid}}-h_\star)/h_\star\).}
 \label{tab:duration}
+\small
 \begin{tabular}{rcccc}
 \hline
 Duration $T$ & Predicted $h_\star$ & Grid minimum $h_{\mathrm{grid}}$ & Bootstrap 95\% interval & Relative difference \\
@@ -440,15 +440,16 @@ Duration $T$ & Predicted $h_\star$ & Grid minimum $h_{\mathrm{grid}}$ & Bootstra
 400 & 0.00807 & 0.00769 & [0.00690, 0.00870] & $-4.7\%$ \\
 \hline
 \end{tabular}
+\normalsize
 \end{table}
 
 This comparison tests calibration transfer in absolute scale across
 duration, in addition to agreement of fitted exponents
 (Table~\ref{tab:duration} and Figure~\ref{fig:duration}).
 
-\begin{figure}[tbp]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.82\textwidth]{results/duration_scaling.png}
+\includegraphics[width=0.82\linewidth]{results/duration_scaling.png}
 \caption{Observed grid minima with 95\% trajectory-bootstrap intervals
 and the asymptotic fixed-\(B\) prediction at \(s=16\). The same absolute
 timestep grid is used at each duration.}
@@ -514,6 +515,7 @@ its held-out \(s=16\) predictions, and duration-slope interval
 \([-0.254,-0.144]\) quantify this controlled setup while keeping the
 limits of the asymptotic model explicit.
 
+\clearpage
 \begin{thebibliography}{99}
 \small
 \bibitem{sanz1999}

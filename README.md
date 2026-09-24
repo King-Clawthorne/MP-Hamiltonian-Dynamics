@@ -31,7 +31,7 @@ paper uses the generated figures in that directory. Its compiled PDF is
 - `experiment.py`: deterministic and stochastic rounding simulations,
   analysis, bootstrap uncertainty estimates, and figure generation.
 - `paper.tex` and `paper.pdf`: manuscript source and compiled paper.
-- The manuscript is laid out for A4 printing with 25 mm margins.
+- The manuscript uses 11 pt body text and 25 mm margins for A4 printing.
 - `results/`: measured CSV data, fit summaries, and figures used in the paper.
 - `pyproject.toml`: project metadata, pinned NumPy and Matplotlib versions, and
   Ruff lint configuration.
