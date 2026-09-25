@@ -1,14 +1,13 @@
 import csv
 import json
 from pathlib import Path
-
 import matplotlib.pyplot as plt
 import numpy as np
 
 OUT = Path(__file__).parent / "results"
 T = 100.0
 K_VALUES = range(6, 19)
-STOCHASTIC_STEP_COUNTS = sorted({round(1.0<<x) for x in np.arange(6, 17.01, 0.5)})
+STOCHASTIC_STEP_COUNTS = sorted({round(2.0**x) for x in np.arange(6, 17.01, 0.5)})
 REPLICATES = 128
 PRECISION_BITS = (8, 10, 12, 16, 20, 24)
 DURATION_VALUES = (25.0, 50.0, 100.0, 200.0, 400.0)
@@ -39,10 +38,6 @@ def deterministic_bias_vector(n, duration):
     return (m_n - rotation) @ np.array([1.0, 0.0])
 
 
-def deterministic_truncation_rms(n, duration):
-    return float(np.linalg.norm(deterministic_bias_vector(n, duration)))
-
-
 def state_error_decomposition(q, p, qe, pe):
     errors = np.column_stack((q.astype(np.float64) - qe, p.astype(np.float64) - pe))
     mean_error = errors.mean(axis=0)
@@ -55,10 +50,6 @@ def state_error_decomposition(q, p, qe, pe):
 def state_errors(q, p, q0, p0):
     qe, pe = exact_state_at(q0, p0, T)
     return np.sqrt((q.astype(np.float64) - qe) ** 2 + (p.astype(np.float64) - pe) ** 2)
-
-
-def relative_energy_errors(q, p):
-    return np.abs(q.astype(np.float64) ** 2 + p.astype(np.float64) ** 2 - 1.0)
 
 
 def integrate_precision(q0, p0, n, dtype):
@@ -134,15 +125,12 @@ def main():
     stochastic_errors = {bits: {} for bits in PRECISION_BITS}
     for label, dtype in (("fp32", np.float32), ("fp64", np.float64)):
         for k in K_VALUES:
-            n = 1.0<<k
+            n = 2.0**k
             q, p = integrate_precision(q0, p0, n, dtype)
             err = state_errors(q, p, q0, p0)
-            energy = relative_energy_errors(q, p)
+            energy = np.abs(q.astype(np.float64) ** 2 + p.astype(np.float64) ** 2 - 1.0)
             precision_rows.append({
-                "precision": label,
-                "steps": n,
-                "h": T / n,
-                "replicates": REPLICATES,
+                "precision": label, "steps": n, "h": T / n, "replicates": REPLICATES,
                 "rms_state_error": float(np.sqrt(np.mean(err**2))),
                 "median_state_error": float(np.median(err)),
                 "q90_state_error": float(np.quantile(err, 0.9)),
@@ -156,13 +144,12 @@ def main():
             qe, pe = exact_state_at(np.ones(REPLICATES), np.zeros(REPLICATES), T)
             errors, sample_bias2, sample_var, mse = state_error_decomposition(q, p, qe, pe)
             stochastic_errors[bits][n] = errors
-            energy = relative_energy_errors(q, p)
+            energy = np.abs(q.astype(np.float64) ** 2 + p.astype(np.float64) ** 2 - 1.0)
             exact_bias2 = float(deterministic_bias_vector(n, T) @ deterministic_bias_vector(n, T))
             stochastic_rows.append({
                 "significand_bits": bits,
                 "unit_roundoff": 2.0**-bits,
-                "steps": n,
-                "h": T / n,
+                "steps": n, "h": T / n,
                 "replicates": REPLICATES,
                 "rms_state_error": float(np.sqrt(mse)),
                 "empirical_mse": mse,
@@ -267,8 +254,7 @@ def main():
     fit_ax.loglog(u_grid, np.exp(intercept) * u_grid**slope, "-", label=f"grid-minimum fit: slope {slope:.3f}")
     fit_ax.loglog(u_grid, np.exp(intercept) * u_grid**0.4, "--", label="reference slope 0.4")
     fit_ax.scatter([heldout["unit_roundoff"]], [heldout["predicted_h"]], marker="s",
-        s=60, facecolors="none", edgecolors="black", zorder=5, label="fixed-B prediction at s=16"
-    )
+    s=60, facecolors="none", edgecolors="black", zorder=5, label="fixed-B prediction at s=16")
     
     fit_ax.set(xlabel=r"unit roundoff $u=2^{-s}$", ylabel="grid-minimizing step h", title="Precision scaling of the optimal step")
     
@@ -298,8 +284,7 @@ def main():
                 "duration": duration,
                 "significand_bits": DURATION_BITS,
                 "unit_roundoff": 2.0**-DURATION_BITS,
-                "steps": n,
-                "h": h,
+                "steps": n, "h": h,
                 "replicates": DURATION_REPLICATES,
                 "rms_state_error": float(np.sqrt(mse)),
                 "empirical_mse": mse,
@@ -340,12 +325,10 @@ def main():
     duration_predictions = []
     for row in duration_optima:
         duration = float(row["duration"])
-        h_pred = (144.0 * B2 * (1>>DURATION_BITS) ** 2 / duration) ** 0.2
+        h_pred = (144.0 * B2 * (2.0**-DURATION_BITS) ** 2 / duration) ** 0.2
         duration_predictions.append({
-            "duration": duration,
-            "significand_bits": DURATION_BITS,
-            "predicted_h": h_pred,
-            "observed_h": float(row["h"]),
+            "duration": duration, "significand_bits": DURATION_BITS,
+            "predicted_h": h_pred, "observed_h": float(row["h"]),
             "observed_h_ci95_low": float(row["h_ci95"][0]),
             "observed_h_ci95_high": float(row["h_ci95"][1]),
             "relative_error": float((row["h"] - h_pred) / h_pred)
@@ -379,7 +362,7 @@ def main():
     grid = np.geomspace(ds.min(), ds.max(), 100)
     ax.loglog(grid, np.exp(duration_intercept) * grid**duration_slope, "-", label=f"fit {duration_slope:.3f} [{slope_ci[0]:.3f}, {slope_ci[1]:.3f}]")
     
-    h_fixed_b = (144.0 * B2 * (1>>DURATION_BITS) ** 2 / grid) ** 0.2
+    h_fixed_b = (144.0 * B2 * (2.0**-DURATION_BITS) ** 2 / grid) ** 0.2
     ax.loglog(grid, h_fixed_b, "--", label="fixed-B prediction (s=16)")
     ax.set(xlabel="duration T", ylabel="grid-minimizing step h", title=f"Duration scaling, s={DURATION_BITS}")
     
