@@ -34,7 +34,7 @@ def verlet_matrix(n, duration):
 
 def deterministic_bias_vector(n, duration):
     m_n = np.linalg.matrix_power(verlet_matrix(n, duration), n)
-    rotation = np.array([[np.cos(duration), np.sin(duration)], [-np.sin(duration), np.cos(duration)]]
+    rotation = np.array([[np.cos(duration), np.sin(duration)], [-np.sin(duration), np.cos(duration)]])
     return (m_n - rotation) @ np.array([1.0, 0.0])
 
 
@@ -392,7 +392,7 @@ def main():
         )
     
     print(f"Stochastic-rounding h_opt slope: {slope:.3f} (predicted 0.4), phase A={A_phase:.6g}, fitted B={B:.6g}")
-    print("Precision h_opt bootstrap 95% CI [{precision_slope_ci[0]:.3f}, {precision_slope_ci[1]:.3f}]")
+    print(f"Precision h_opt bootstrap 95% CI [{precision_slope_ci[0]:.3f}, {precision_slope_ci[1]:.3f}]")
     print(f"Duration h_opt slope: {duration_slope:.3f} (predicted -0.2), bootstrap 95% CI [{slope_ci[0]:.3f}, {slope_ci[1]:.3f}]")
 
 
